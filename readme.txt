@@ -4,7 +4,7 @@ Donate link: N/A
 Tags: Campaign Monitor, Email Marketing, Subscription, Personalization
 Requires at least: 4.0.1
 Tested up to: 6.0
-Stable tag: 1.4.9
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,8 @@ PHP 7 introduced connectivity issues between our plugin and Campaign Monitor whe
 
 == Changelog ==
 
+= 1.5.0 =
+* Major change as the subscribers are added only when they choose to subscribe to newsletter (ie: added to the list and newsletter-segments, where previously it was added to the list and only added to the newsletter-segment when they choose to subscribe to newsletter).
 = 1.4.9 =
 = 1.4.8 =
 * Minor fixes for PHP8

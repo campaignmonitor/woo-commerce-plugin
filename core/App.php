@@ -274,13 +274,7 @@ class App
             }
 
             if (array_key_exists('cmw_register_email', $_POST)){
-                if (!empty($email)){
-                    Subscribers::add($email);
-                    $isSubscribe = true;
-                }
-            }
-
-            if (!empty($newCustomer->data)){
+                if (!empty($newCustomer->data)){
                 $listId = Settings::get('default_list');
                 $mappedFields = Map::get();
                 $details = current($newCustomer->data);
@@ -289,6 +283,7 @@ class App
                 if (!empty($autoSubscribe) && $autoSubscribe ){
                     if (!empty($email)){
                         Subscribers::add($email);
+                        $isSubscribe = true;
                     }
                 }
 
@@ -329,6 +324,9 @@ class App
                 Log::write($result);
 
             }
+            }
+
+            
         }
     }
     public static function woocommerce_subscription_box(){
