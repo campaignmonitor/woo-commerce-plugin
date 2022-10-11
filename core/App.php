@@ -274,61 +274,56 @@ class App
             }
 
             if (array_key_exists('cmw_register_email', $_POST)){
-                if (!empty($email)){
-                    Subscribers::add($email);
-                    $isSubscribe = true;
-                }
-            }
+                if (!empty($newCustomer->data)){
+                    $listId = Settings::get('default_list');
+                    $mappedFields = Map::get();
+                    $details = current($newCustomer->data);
 
-            if (!empty($newCustomer->data)){
-                $listId = Settings::get('default_list');
-                $mappedFields = Map::get();
-                $details = current($newCustomer->data);
-
-                $autoSubscribe = Helper::getOption('automatic_subscription');
-                if (!empty($autoSubscribe) && $autoSubscribe ){
-                    if (!empty($email)){
-                        Subscribers::add($email);
-                    }
-                }
-
-                if (!empty($email) || isset($address['email'])){
-                    if (isset($address['email']) && !empty($address['email'])){
-                        $emailToEnroll = $address['email'];
-                    } else if (!empty($email)){
-                        $emailToEnroll = $email;
+                    $autoSubscribe = Helper::getOption('automatic_subscription');
+                    if (!empty($autoSubscribe) && $autoSubscribe ){
+                        if (!empty($email)){
+                            Subscribers::add($email);
+                            $isSubscribe = true;
+                        }
                     }
 
-                    $alreadyEnroll = Subscribers::get($emailToEnroll);
-                    if (!empty($alreadyEnroll)){
-                        $isSubscribe = true;
+                    if (!empty($email) || isset($address['email'])){
+                        if (isset($address['email']) && !empty($address['email'])){
+                            $emailToEnroll = $address['email'];
+                        } else if (!empty($email)){
+                            $emailToEnroll = $email;
+                        }
+
+                        $alreadyEnroll = Subscribers::get($emailToEnroll);
+                        if (!empty($alreadyEnroll)){
+                            $isSubscribe = true;
+                        }
                     }
-                }
 
-                $expiry = Settings::get('expiry');
-                $auth = array(
-                    'access_token' => Settings::get('access_token'),
-                    'refresh_token' => Settings::get('refresh_token')
-                );
-                if ($expiry !== null && ($expiry - time() <  (60*60*24)))
-                {
-                    list($new_access_token, $new_expires_in, $new_refresh_token) = self::$CampaignMonitor->refresh_token($auth);
-
-                    Settings::add('access_token',$new_access_token);
-                    Settings::add('refresh_token',$new_refresh_token);
-                    Settings::add('expiry',$new_expires_in + time());
+                    $expiry = Settings::get('expiry');
                     $auth = array(
-                        'access_token' => $new_access_token,
-                        'refresh_token' => $new_refresh_token
+                        'access_token' => Settings::get('access_token'),
+                        'refresh_token' => Settings::get('refresh_token')
                     );
+                    if ($expiry !== null && ($expiry - time() <  (60*60*24)))
+                    {
+                        list($new_access_token, $new_expires_in, $new_refresh_token) = self::$CampaignMonitor->refresh_token($auth);
+
+                        Settings::add('access_token',$new_access_token);
+                        Settings::add('refresh_token',$new_refresh_token);
+                        Settings::add('expiry',$new_expires_in + time());
+                        $auth = array(
+                            'access_token' => $new_access_token,
+                            'refresh_token' => $new_refresh_token
+                        );
+                    }
+
+                    $userToExport = Customer::format($details, $mappedFields, $isSubscribe);
+                    $userToExport = (array)$userToExport;
+                    $result = self::$CampaignMonitor->add_subscriber($listId, $userToExport, $auth);
+                    Log::write($result);
                 }
-
-                $userToExport = Customer::format($details, $mappedFields, $isSubscribe);
-                $userToExport = (array)$userToExport;
-                $result = self::$CampaignMonitor->add_subscriber($listId, $userToExport, $auth);
-                Log::write($result);
-
-            }
+            }           
         }
     }
     public static function woocommerce_subscription_box(){
