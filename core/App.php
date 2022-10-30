@@ -404,10 +404,7 @@ class App
                 if ($type == 'create_list') {
                     $clientId = $data['client_id'];
                     $listName = $data['list_name'];
-                    $optIn = $data['opt_in'];
-                    $optIn = ($optIn == 2) ? true : false;
-                    $newList = App::$CampaignMonitor->create_list($clientId, $listName, $optIn);
-
+                    $newList = App::$CampaignMonitor->create_list($clientId, $listName, false);
 
                     Settings::add('default_list', $newList);
                     Settings::add('default_client',$clientId );

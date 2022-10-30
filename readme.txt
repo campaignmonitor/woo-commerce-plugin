@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Easily subscribe customers to your Campaign Monitor mailing list at checkout.
 
 == Description ==
-Campaign Monitor for WooCommerce allows your customers to sign up to a list in your [campaignmonitor.com](https://www.campaignmonitor.com?utm_source=woocommerce-plugin&utm_medium=referral) account at checkout. You can then use your list to send campaigns or automated journeys.
+Campaign Monitor for WooCommerce allows your customers to be added to a list in your [campaignmonitor.com](https://www.campaignmonitor.com?utm_source=woocommerce-plugin&utm_medium=referral) account at checkout.
 
 Get started with pre-packaged segments. Once connected with your Campaign Monitor account, you’ll automatically be set up with segments, which help you target smaller groups of subscribers:
 
@@ -35,7 +35,21 @@ Campaign Monitor makes it radically easy to create, send and measure the impact 
 PHP 7 introduced connectivity issues between our plugin and Campaign Monitor when the WordPress site is not running on HTTPS. We are unable to resolve this problem with a regular update from your Admin. If you are experiencing this problem, you will need to disconnect, delete the plugin and install the latest version. We apologize for the inconvenience.
 
 == Frequently Asked Questions ==
+= Why am I unable to use the Confirmed opt-in list for this plugin?
+- If the list has the "Confirmed opt-in" setting enabled, new customers (determined by their email address) will be sent a confirmation email with a link to validate their email address before being added to the list. This would happen even if they did not select the subscription option at checkout. To prevent this from happening, we had disable selecting Confirmed opt-in list to be used for this plugin.
 
+= Would my list still be clean if I am using Single opt-in list?
+- Given that the email address is used in the checkout process, it is most likely that valid email address is being used and therefore your list should still be clean.
+
+= Who is subscribed to my list with this plugin? =
+- Customers that have been through the checkout process in your WooCommerce store are added to the list that you have configured. This enables basic analytics to be calculated around high-spender / repeat customers.  
+- If you have enabled the setting "Show subscription option at checkout" AND the customer chooses to opt-in to this at checkout, the customer would also be added to the "WooCommerce Newsletter Subscribers" segment in your list. 
+
+= Does this plugin send an email to my customers?
+- This plugin does not send any emails. You would need to either send an email manually or have email automation set up in the Campaign Monitor platform. 
+
+= Do I need a Campaign Monitor account to use this plugin? =
+Yes, you do ([sign up here](https://www.campaignmonitor.com/?utm_source=woocommerce-plugin&utm_medium=referral)).
 
 == Screenshots ==
 
@@ -44,8 +58,6 @@ PHP 7 introduced connectivity issues between our plugin and Campaign Monitor whe
 
 == Changelog ==
 
-= 1.5.0 =
-* Major change as the subscribers are added only when they choose to subscribe to newsletter (ie: added to the list and newsletter-segments, where previously it was added to the list and only added to the newsletter-segment when they choose to subscribe to newsletter).
 = 1.4.9 =
 = 1.4.8 =
 * Minor fixes for PHP8

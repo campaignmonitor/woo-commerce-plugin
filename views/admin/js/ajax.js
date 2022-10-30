@@ -45,15 +45,12 @@ jQuery(document).ready(function($) {
         var subscriptionBox =  $('#subscriptionBox').is(':checked');
 
         var listToCreate = newList.val();
-        var listType = $('#listType').val();
         
         dataToSend.debug = debug;
         dataToSend.subscribe = subscribe;
         dataToSend.subscribe_text = subscribeText;
         dataToSend.subscriptionBox = subscriptionBox;
         dataToSend.new_list_name = listToCreate;
-        dataToSend.new_list_type = listType;
-
 
         $.ajax({
             type: "POST",
