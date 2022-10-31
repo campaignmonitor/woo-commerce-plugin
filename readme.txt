@@ -58,6 +58,10 @@ Yes, you do ([sign up here](https://www.campaignmonitor.com/?utm_source=woocomme
 
 == Changelog ==
 
+= 1.5.0 =
+* Change to disable the use of Confirmed opt-in List for this plugin. 
+* Updated to add FAQ to explain why Confirmed opt-in List is not suitable for this plugin.
+* Also when creating a new list, remove the ability to select the list type (Single opt-in or Confirmed opt-in). This would now always default to Single opt-in.
 = 1.4.9 =
 = 1.4.8 =
 * Minor fixes for PHP8
