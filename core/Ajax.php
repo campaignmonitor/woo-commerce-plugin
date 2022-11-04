@@ -462,12 +462,12 @@ abstract class Ajax
                     $listDetails = App::$CampaignMonitor->get_list_details($id);
                     $selected = '';
 
-                    if ($id == $selectedList){
-                        $selected = 'selected="selected"';
-                        $isSelected = true;
-                    }
-                        
                     if (!$listDetails->ConfirmedOptIn) {
+                        if ($id == $selectedList){
+                            $selected = 'selected="selected"';
+                            $isSelected = true;
+                        }
+   
                         $html .= '<option '.$selected .' value="'.$clientId.'" data-id="'.$id.'"  data-url="' . self::$actionUrl . '&' . $viewClientListUrl . '&ClientID=' . $clientId . '&action=get_list_settings">';
                         $html .= Util::htmlDecodeEncode($list->Name);
                         $html .= '</option>';

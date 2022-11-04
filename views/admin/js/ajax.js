@@ -26,6 +26,14 @@ jQuery(document).ready(function($) {
         e.preventDefault();
 
         var params = $("#lists option:selected").attr('data-url');
+        
+        if (!params){
+            e.preventDefault();
+            $('#lists').css("border", "1px solid red");
+            return false;
+        } else {
+            $('#lists').css("border", "1px solid #8c8f94");
+        }
 
         var dataToSend = JSON.parse('{"' + decodeURI(params).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
 
