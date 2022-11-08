@@ -117,9 +117,6 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#btnCreateList', function (e) {
         var name = $('#listName').val();
         var id = $('#clientSelection').val();
-        var optIn = $('#listType').val();
-
-
 
         if ( name == ''){
             $('#listName').css('border', '1px solid #FF0000');
@@ -129,7 +126,6 @@ jQuery(document).ready(function($) {
             $('.campaign-monitor-woocommerce .progress-notice').slideDown();
             $('#listNameData').val(name);
             $('#clientIdData').val(id);
-            $('#optInData').val(optIn);
         }
     });
 

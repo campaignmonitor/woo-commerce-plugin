@@ -115,6 +115,7 @@ if (!empty($appSettings) && !empty($accessToken)) {
 $clientListSettings = \core\ClientList::get($defaultList);
 
 $actionUrl = get_admin_url() . 'admin.php?page=campaign_monitor_woocommerce';
+$isConfirmedOptInList = false;
 
 if (!empty($defaultList)) {
     $getOnlyVisibleFields = true;
@@ -132,7 +133,9 @@ if (!empty($defaultList)) {
     if (empty($currentList)) {
         \core\Settings::add('default_list', null);
         echo "<script>location.reload();</script>";
-
+    }
+    else {
+        $isConfirmedOptInList = $currentList->ConfirmedOptIn;
     }
 
 }
@@ -269,8 +272,12 @@ $subscriptionBox = \core\Helper::getOption('toggle_subscription_box');
             </p>
         </div>
     <?php endif; ?>
-
-
+    
+    <?php if ((is_array($notices) && !in_array('confirmed_opt_in_notice',$notices, TRUE ) ) && $isConfirmedOptInList) : ?>
+        <div data-method="confirmed_opt_in_notice" class="updated notice cm-plugin-ad is-dismissible">
+            <p>Your previous setting is using a confirmed-opt-in list which is not suitable for this plugin. Please select a single-opt-in list and save your changes.</p>
+        </div>
+    <?php endif; ?>
 
     <?php if (is_array($notices) &&!in_array('show_ad',$notices, TRUE )) : ?>
         <div id="cmPlugin" data-method="show_ad" class="updated notice cm-plugin-ad is-dismissible">
@@ -339,7 +346,7 @@ $subscriptionBox = \core\Helper::getOption('toggle_subscription_box');
                                             <input type="hidden" name="data[app_nonce]" value="<?php echo wp_create_nonce( 'app_nonce' ); ?>">
                                             <input type="hidden" id="clientNameData" name="data[client_name]" placeholder="New Client Name" value="">
 
-                                            <button id="btnCreateNewClient" type="submit" class="regular-text ltr" placeholder="List Name">
+                                            <button id="btnCreateNewClient" type="submit" class="regular-text ltr">
                                                 Create Client
                                             </button>
                                         </form>
@@ -370,34 +377,15 @@ $subscriptionBox = \core\Helper::getOption('toggle_subscription_box');
                                 </tr>
                                 <tr valign="top" class="new-list-creation">
                                     <th scope="row">
-                                        List Type
+
                                     </th>
                                     <td>
-                                        <select id="listType" name="type" class="dropdown-select">
-                                            <option value="2" selected>Confirmed opt-in (confirmation required)</option>
-                                            <option value="1" >Single opt-in (no confirmation required)</option>
-                                        </select>
-                                        <p><em>
-                                                <strong>Single opt-in</strong> means new subscribers are added to this list as soon as
-                                                they complete the subscribe form.
-                                            </em>
-                                        </p>
-                                        <p><em>
-                                                <strong>Confirmed opt-in</strong> means a confirmation email will be sent with a link they must click to validate their address. This confirmation isn't required when you
-                                                import existing subscribers, only when new subscribers join via your subscribe form.</em></p>
-                                        <p><em><a href="http://help.campaignmonitor.com/topic.aspx?t=16">Learn more about confirmed opt-in lists.</a></em> </p>
-
-
                                         <form action="<?php echo get_admin_url(); ?>admin-post.php" method="post">
                                             <input type="hidden" name="action" value="handle_request">
                                             <input type="hidden" name="data[type]" value="create_list">
                                             <input type="hidden" name="data[app_nonce]" value="<?php echo wp_create_nonce( 'app_nonce' ); ?>">
                                             <input type="hidden" id="listNameData" name="data[list_name]" value="">
                                             <input type="hidden" id="clientIdData" name="data[client_id]" value="">
-                                            <input type="hidden" id="optInData" name="data[opt_in]" value="">
-                                            <!--                                            <button id="btnCreateList" type="submit" class="regular-text ltr" placeholder="List Name">-->
-                                            <!--                                                Create List-->
-                                            <!--                                            </button>-->
                                         </form>
                                     </td>
                                 </tr>
@@ -406,7 +394,6 @@ $subscriptionBox = \core\Helper::getOption('toggle_subscription_box');
                                         Subscription Box
                                     </th>
                                     <td>
-
                                         <label for="subscriptionBox">
                                             <input id="subscriptionBox" name="toggle_subscription_box"  checked="checked" <?php echo (isset($clientListSettings['toggle_subscription_box']) && $clientListSettings['toggle_subscription_box']) ? 'checked="checked"': ''; ?>  type="checkbox">  Show subscription option at checkout</label>
 

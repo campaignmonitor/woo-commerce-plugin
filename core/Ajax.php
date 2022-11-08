@@ -201,9 +201,8 @@ abstract class Ajax
             self::remove_notice('connected_list_notice');
 
             if (array_key_exists('new_list_name', $params ) && !empty($params['new_list_name'])){
-                $optIn = ($params['new_list_type'] == 2) ? true : false;
                 $newListName = $params['new_list_name'];
-                $newListId = App::$CampaignMonitor->create_list($params['ClientID'], $newListName, $optIn);
+                $newListId = App::$CampaignMonitor->create_list($params['ClientID'], $newListName, false);
                 $params['ListID'] = $newListId;
             }
 
@@ -439,8 +438,6 @@ abstract class Ajax
             $clientId = $params['ClientID'];
             $lists = App::$CampaignMonitor->get_client_list($clientId);
 
-
-
             $html = '';
             if ($lists) {
                 $html = '<select id="lists"  class="ajax-call list client-list dropdown-select ">';
@@ -453,26 +450,42 @@ abstract class Ajax
                 $html .= 'Create new list';
                 $html .= '</option>';
                 $html .= '<option class="ajax-call" disabled >';
-                $html .= '---';
+                $html .= '--- Single opt-in --- suitable for this plugin';
                 $html .= '</option>';
                 $isSelected = false;
+                $hasConfirmedOptInList = false;
+                $htmlConfirmedOptIn = '';
                 foreach ($lists as $list) {
                     $id = $list->ListID;
-
+                    
                     $viewClientListUrl = http_build_query((array)$list);
-                    $fields = App::$CampaignMonitor->get_stats($id);
+                    $listDetails = App::$CampaignMonitor->get_list_details($id);
                     $selected = '';
 
-                    if ($id == $selectedList){
-                        $selected = 'selected="selected"';
-                        $isSelected = true;
+                    if (!$listDetails->ConfirmedOptIn) {
+                        if ($id == $selectedList){
+                            $selected = 'selected="selected"';
+                            $isSelected = true;
+                        }
+   
+                        $html .= '<option '.$selected .' value="'.$clientId.'" data-id="'.$id.'"  data-url="' . self::$actionUrl . '&' . $viewClientListUrl . '&ClientID=' . $clientId . '&action=get_list_settings">';
+                        $html .= Util::htmlDecodeEncode($list->Name);
+                        $html .= '</option>';
                     }
+                    else {
+                        $hasConfirmedOptInList = true;
+                        $htmlConfirmedOptIn .= '<option '.$selected .' disabled value="'.$clientId.'" data-id="'.$id.'"  data-url="' . self::$actionUrl . '&' . $viewClientListUrl . '&ClientID=' . $clientId . '&action=get_list_settings">';
+                        $htmlConfirmedOptIn .= Util::htmlDecodeEncode($list->Name);
+                        $htmlConfirmedOptIn .= '</option>';
+                    }
+                }
 
-
-                    $html .= '<option '.$selected .' value="'.$clientId.'" data-id="'.$id.'"  data-url="' . self::$actionUrl . '&' . $viewClientListUrl . '&ClientID=' . $clientId . '&action=get_list_settings">';
-                    $html .= Util::htmlDecodeEncode($list->Name);
+                if ($hasConfirmedOptInList) {
+                    $html .= '<option class="ajax-call" disabled >';
+                    $html .= '--- Confirmed opt-in --- not suitable for this plugin';
                     $html .= '</option>';
 
+                    $html .= $htmlConfirmedOptIn;
                 }
 
                 $html .= '</select>';
