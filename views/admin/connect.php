@@ -115,6 +115,7 @@ if (!empty($appSettings) && !empty($accessToken)) {
 $clientListSettings = \core\ClientList::get($defaultList);
 
 $actionUrl = get_admin_url() . 'admin.php?page=campaign_monitor_woocommerce';
+$isConfirmedOptInList = false;
 
 if (!empty($defaultList)) {
     $getOnlyVisibleFields = true;
@@ -132,7 +133,9 @@ if (!empty($defaultList)) {
     if (empty($currentList)) {
         \core\Settings::add('default_list', null);
         echo "<script>location.reload();</script>";
-
+    }
+    else {
+        $isConfirmedOptInList = $currentList->ConfirmedOptIn;
     }
 
 }
@@ -269,8 +272,12 @@ $subscriptionBox = \core\Helper::getOption('toggle_subscription_box');
             </p>
         </div>
     <?php endif; ?>
-
-
+    
+    <?php if ((is_array($notices) && !in_array('confirmed_opt_in_notice',$notices, TRUE ) ) && $isConfirmedOptInList) : ?>
+        <div data-method="confirmed_opt_in_notice" class="updated notice cm-plugin-ad is-dismissible">
+            <p>Your previous setting is using a confirmed-opt-in list which is not suitable for this plugin. Please select a single-opt-in list and save your changes.</p>
+        </div>
+    <?php endif; ?>
 
     <?php if (is_array($notices) &&!in_array('show_ad',$notices, TRUE )) : ?>
         <div id="cmPlugin" data-method="show_ad" class="updated notice cm-plugin-ad is-dismissible">
