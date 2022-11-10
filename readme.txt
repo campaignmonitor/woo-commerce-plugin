@@ -3,7 +3,7 @@ Contributors: vibhorchhabra
 Donate link: N/A
 Tags: Campaign Monitor, Email Marketing, Subscription, Personalization
 Requires at least: 4.0.1
-Tested up to: 6.0
+Tested up to: 6.1
 Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -62,6 +62,7 @@ Yes, you do ([sign up here](https://www.campaignmonitor.com/?utm_source=woocomme
 * Change to disable the use of Confirmed opt-in List for this plugin. Please check your setting that you have the correct list type.
 * Added FAQ to explain why Confirmed opt-in List is not suitable for this plugin.
 * Also when creating a new list, remove the ability to select the list type (Single opt-in or Confirmed opt-in). This would now always default to Single opt-in.
+* Tested in Wordpress 6.1
 = 1.4.9 =
 = 1.4.8 =
 * Minor fixes for PHP8
